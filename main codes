@@ -1,0 +1,176 @@
+ProductController.cs
+
+using System.Collections.Generic;
+using System.Web.Mvc;
+using ProductCatalog.Models;
+namespace ProductCatalog.Controllers
+{
+ public class ProductController : Controller
+ {
+ public ActionResult Index()
+ {
+ List<Product> products = new List<Product>()
+ {
+ new Product
+ {
+ ProductId = 1,
+ProductName = "Laptop",
+Category = "Electronics",
+Price = 55000,
+Description = "High performance laptop"
+ },
+ new Product
+ {
+ ProductId = 2,
+ProductName = "Mobile Phone",
+Category = "Electronics",
+Price = 25000,
+Description = "Latest smartphone"
+ },
+ new Product
+ {
+ ProductId = 3,
+ProductName = "Headphones",
+Category = "Accessories",
+Price = 2500,
+
+Description = "Wireless headphones"
+ },
+ new Product
+ {
+ ProductId = 4,
+ProductName = "Keyboard",
+Category = "Accessories",
+Price = 1500,
+Description = "USB mechanical keyboard"
+ }
+ };
+ return View(products);
+ }
+ public ActionResult Details(int id)
+ {
+ Product product = new Product();
+ if (id == 1)
+ {
+ product = new Product
+ {
+ ProductId = 1,
+ProductName = "Laptop",
+Category = "Electronics",
+Price = 55000,
+Description = "High performance laptop"
+ };
+ }
+ else if (id == 2)
+ {
+ product = new Product
+ {
+ ProductId = 2,
+ProductName = "Mobile Phone",
+Category = "Electronics",
+Price = 25000,
+Description = "Latest smartphone"
+ };
+ }
+ else if (id == 3)
+ {
+ product = new Product
+ {
+ ProductId = 3
+ ProductName = "Headphones",
+Category = "Accessories",
+Price = 2500,
+Description = "Wireless headphones"
+ };
+ }
+ else
+ {
+ product = new Product
+ {
+ ProductId = 4,
+ProductName = "Keyboard",
+Category = "Accessories",
+Price = 1500,
+Description = "USB mechanical keyboard"
+ };
+ }
+ return View(product);
+ }
+ }
+}
+
+
+Index.cshtml
+
+@model IEnumerable<ProductCatalog.Models.Product>
+@{
+ ViewBag.Title = "Product Catalog";
+}
+<h2>Product Catalog</h2>
+<table border="1" cellpadding="10" cellspacing="0">
+ <tr>
+ <th>Product ID</th>
+ <th>Product Name</th>
+ <th>Category</th>
+ <th>Price</th>
+ <th>Description</th>
+ <th>Action</th>
+ </tr>
+ @foreach (var product in Model)
+ {
+ <tr>
+ <td>@product.ProductId</td>
+ <td>@product.ProductName</td>
+ <td>@product.Category</td>
+ <td>₹@product.Price</td>
+ <td>@product.Description</td>
+ <td>
+ @Html.ActionLink(
+ "View Details",
+"Details",
+"Product",
+new { id = product.ProductId },
+null
+ )
+ </td>
+ </tr>
+ }
+</table>
+Product.cs
+using System;
+namespace ProductCatalog.Models
+{
+ public class Product
+ {
+ public int ProductId { get; set; }
+ public string ProductName { get; set; }
+ public string Category { get; set; }
+ public decimal Price { get; set; }
+ public string Description { get; set; }
+ }
+}
+
+
+RputeConfig.cs
+using System.Web.Mvc;
+using System.Web.Routing;
+namespace ProductCatalog
+{
+ public class RouteConfig
+ {
+ public static void RegisterRoutes(RouteCollection routes)
+ {
+ routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+ routes.MapRoute(
+ name: "Default",
+ url: "{controller}/{action}/{id}",
+ defaults: new
+ {
+ controller = "Product",
+action = "Index",
+id = UrlParameter.Optional
+ }
+ );
+ }
+ }
+}
